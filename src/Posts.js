@@ -14,22 +14,17 @@ query {
 }
 `;
 
-const postToJSX = (post) => {
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <h3>{post.author.name}</h3>
-      <h3>{post.createdAt}</h3>
-    </div>
-  );
-};
+const postToJSX = ({ title, author, createdAt }) => (
+  <div>
+    <h1>{title}</h1>
+    <h3>{author.name}</h3>
+    <h3>{createdAt}</h3>
+  </div>
+);
 
 class Posts extends Component {
   render() {
-    const data = this.props.data;
-    const loading = data.loading;
-    const error = data.error;
-    const posts = data.posts;
+    const { loading, error, posts } = this.props.data;
 
     if (loading) {
       return (

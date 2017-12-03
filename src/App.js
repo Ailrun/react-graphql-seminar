@@ -4,14 +4,11 @@ import Posts from './Posts';
 
 const percentage = ((2 + 3) / 100) * 100;
 
-const NavBar = props => (
-  <nav>
-    {props.children}
-  </nav>
-);
-const NavButtons = props => [
-  <button onClick={() => props.handler('Main')}>Main</button>,
-  <button onClick={() => props.handler('Posts')}>Posts</button>
+const NavBar = ({ children }) => <nav>{children}</nav>;
+
+const NavButtons = ({ handler }) => [
+  <button onClick={handler.bind(null, 'Main')}>Main</button>,
+  <button onClick={handler.bind(null, 'Posts')}>Posts</button>,
 ];
 
 class App extends Component {
@@ -32,7 +29,9 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.page === 'Posts') {
+    const { page } = this.state;
+
+    if (page === 'Posts') {
       return (
         <div>
           <NavBar>
@@ -48,7 +47,7 @@ class App extends Component {
         <NavBar>
           <NavButtons handler={this.handleNavButtonClick} />
         </NavBar>
-        현재 Page 는 {this.state.page} 입니다.
+        현재 Page 는 {page} 입니다.
         현재 진행률은 {percentage} % 입니다.
       </div>
     );
