@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import Posts from './Posts';
+
 const percentage = ((2 + 3) / 100) * 100;
 
 const NavBar = props => (
@@ -12,7 +14,7 @@ const NavButtons = props => [
   <button onClick={() => props.handler('Posts')}>Posts</button>
 ];
 
-class MyApp extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -30,6 +32,17 @@ class MyApp extends Component {
   }
 
   render() {
+    if (this.state.page === 'Posts') {
+      return (
+        <div>
+          <NavBar>
+            <NavButtons handler={this.handleNavButtonClick} />
+          </NavBar>
+          <Posts />
+        </div>
+      );
+    }
+
     return (
       <div>
         <NavBar>
@@ -41,4 +54,4 @@ class MyApp extends Component {
     );
   }
 }
-export default MyApp;
+export default App;
