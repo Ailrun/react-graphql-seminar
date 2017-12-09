@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Collapse } from 'antd';
+
+const Panel = Collapse.Panel;
 
 const query = gql`
 query {
   posts {
+    id
     title
-    createdAt
+    contents
     author {
       name
     }
@@ -14,13 +18,29 @@ query {
 }
 `;
 
-const postToJSX = (post) => {
+const PostHeader = (props) => {
   return (
-    <div>
-      <h1>{post.title}</h1>
-      <h3>{post.author.name}</h3>
-      <h3>{post.createdAt}</h3>
-    </div>
+    <h2 style={{ paddingRight: '10px', fontSize: '14px' }}>
+      {props.title}
+      <span style={{ float: 'right', fontSize: '10px', color: 'gray' }}>
+        {props.authorName}
+      </span>
+    </h2>
+  );
+};
+
+const postToJSX = (post) => {
+  const header = (
+    <PostHeader
+      title={post.title}
+      authorName={post.author.name}
+    />
+  );
+
+  return (
+    <Panel key={post.id} header={header}>
+      <p>{post.contents}</p>
+    </Panel>
   );
 };
 
@@ -44,9 +64,9 @@ class Posts extends Component {
     }
 
     return (
-      <div>
+      <Collapse bordered={false}>
         {posts.map(postToJSX)}
-      </div>
+      </Collapse>
     );
   }
 }

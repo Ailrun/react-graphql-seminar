@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
+import { Breadcrumb, Layout, Menu } from 'antd';
+
+import logo from './logo.svg';
 
 import Posts from './Posts';
 
-const percentage = ((2 + 3) / 100) * 100;
-
-const NavBar = props => (
-  <nav>
-    {props.children}
-  </nav>
-);
-const NavButtons = props => [
-  <button onClick={() => props.handler('Main')}>Main</button>,
-  <button onClick={() => props.handler('Posts')}>Posts</button>
-];
+const Header = Layout.Header;
+const Content = Layout.Content;
+const MenuItem = Menu.Item;
+const BreadItem = Breadcrumb.Item;
 
 class App extends Component {
   constructor(props) {
@@ -22,35 +18,45 @@ class App extends Component {
       page: 'Main'
     };
 
-    this.handleNavButtonClick = this.handleNavButtonClick.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
   }
 
-  handleNavButtonClick(buttonType) {
+  handleMenuItemClick(obj) {
     this.setState({
-      page: buttonType
+      page: obj.key
     });
   }
 
   render() {
-    if (this.state.page === 'Posts') {
-      return (
-        <div>
-          <NavBar>
-            <NavButtons handler={this.handleNavButtonClick} />
-          </NavBar>
-          <Posts />
-        </div>
-      );
-    }
+    const content =
+      this.state.page === 'Posts' ?
+      <Posts /> :
+      `현재 Page 는 ${this.state.page} 입니다.`;
 
     return (
-      <div>
-        <NavBar>
-          <NavButtons handler={this.handleNavButtonClick} />
-        </NavBar>
-        현재 Page 는 {this.state.page} 입니다.
-        현재 진행률은 {percentage} % 입니다.
-      </div>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header style={{ paddingLeft: '0', height: '48px' }}>
+          <img src={logo} style={{ float: 'left', height: '48px' }} />
+          <Menu
+            theme='dark'
+            selectedKeys={[this.state.page]}
+            mode='horizontal'
+            onClick={this.handleMenuItemClick}
+            style={{ lineHeight: '48px' }}
+          >
+            <MenuItem key='Main'>Main</MenuItem>
+            <MenuItem key='Posts'>Posts</MenuItem>
+          </Menu>
+        </Header>
+        <Layout>
+          <Breadcrumb style={{ margin: '0 10px', marginTop: '16px' }}>
+            <BreadItem>{this.state.page}</BreadItem>
+          </Breadcrumb>
+          <Content style={{ margin: '16px', padding: '16px', background: 'white' }}>
+            {content}
+          </Content>
+        </Layout>
+      </Layout>
     );
   }
 }
